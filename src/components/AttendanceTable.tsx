@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { familyData } from "../data/data";
 import { calculatePercentage } from "../util/calculations";
 
@@ -260,62 +261,76 @@ export default function AttendanceTable({ data }: { data: familyData }) {
       </table>
 
       {/* Ranking table with church percentage */}
-      <div className="flex gap-1 print:break-inside-avoid">
-        <table className="w-[500px] border-separate border-spacing-1">
-          <thead>
-            <tr>
-              <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
-                FAMILY
-              </th>
-              <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
-                PERCENTAGE
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.entries(families)
-              .filter(([key]) => key !== "church")
-              .map(([family, stats]) => ({
-                name: family.toUpperCase(),
-                percentage: calculatePercentage(stats),
-              }))
-              .sort((a, b) => b.percentage - a.percentage)
-              .map(({ name, percentage }) => (
-                <tr key={name} className="print:text-sm">
-                  <td className="border border-black p-2 print:p-1">{name}</td>
-                  <td
-                    className={`border border-black p-2 print:p-1 text-center ${
-                      percentage < 50 ? "text-red-500" : ""
-                    }`}
-                  >
-                    {percentage.toFixed(2)}%
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-        <table className="border-separate border-spacing-1">
-          <thead>
-            <tr>
-              <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
-                CHURCH
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="print:text-sm">
-              <td
-                className={`border border-black p-2 print:p-1 text-center ${
-                  calculatePercentage(families.church) < 50
-                    ? "text-red-500"
-                    : ""
-                }`}
-              >
-                {calculatePercentage(families.church).toFixed(2)}%
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="pt-20">
+        <div className="flex justify-between">
+          <div className="flex gap-2 items-center">
+            <h1 className="font-bold text-2xl print:text-xl underline">
+              RANKING
+            </h1>
+          </div>
+          <div>
+            <Image src="/sda_logo.svg" alt="logo" width={180} height={180} />
+          </div>
+        </div>
+        <div className="flex gap-1 print:break-inside-avoid">
+          <table className="w-[500px] border-separate border-spacing-1">
+            <thead>
+              <tr>
+                <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
+                  FAMILY
+                </th>
+                <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
+                  PERCENTAGE
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(families)
+                .filter(([key]) => key !== "church")
+                .map(([family, stats]) => ({
+                  name: family.toUpperCase(),
+                  percentage: calculatePercentage(stats),
+                }))
+                .sort((a, b) => b.percentage - a.percentage)
+                .map(({ name, percentage }) => (
+                  <tr key={name} className="print:text-sm">
+                    <td className="border border-black p-2 print:p-1">
+                      {name}
+                    </td>
+                    <td
+                      className={`border border-black p-2 print:p-1 text-center ${
+                        percentage < 50 ? "text-red-500" : ""
+                      }`}
+                    >
+                      {percentage.toFixed(2)}%
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+          <table className="border-separate border-spacing-1">
+            <thead>
+              <tr>
+                <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
+                  CHURCH
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="print:text-sm">
+                <td
+                  className={`border border-black p-2 print:p-1 text-center ${
+                    calculatePercentage(families.church) < 50
+                      ? "text-red-500"
+                      : ""
+                  }`}
+                >
+                  {calculatePercentage(families.church).toFixed(2)}%
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

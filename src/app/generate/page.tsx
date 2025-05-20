@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import AttendanceTable from "@/components/AttendanceTable";
 import { data } from "@/data/data";
@@ -32,6 +33,10 @@ export default function Page() {
               ATTENDANCE LIST
             </h1>
           </div>
+        </div>
+        {/* The logo */}
+        <div>
+          <Image src="/sda_logo.svg" alt="logo" width={200} height={200} />
         </div>
       </div>
 
