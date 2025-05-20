@@ -1,4 +1,21 @@
-export const data = [
+export interface familyData {
+  [key: string]: {
+    abanditswe: number;
+    abaje: number;
+    abizeKarindwi: number;
+    abatangiyeIsabato: number;
+    abasuye: number;
+    abasuwe: number;
+    abafashijwe: number;
+    abafashije: number;
+    abarwayi: number;
+    abasibye: number;
+    abafiteImpamvu: number;
+    abashyitsi: number;
+  };
+}
+
+export const data: familyData[] = [
   {
     ebenezer: {
       abanditswe: 15,
