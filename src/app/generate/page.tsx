@@ -1,3 +1,6 @@
+import AttendanceTable from "@/components/AttendanceTable";
+import { data } from "@/data/data";
+
 export default function Page() {
   return (
     <div className="mx-20 my-10">
@@ -13,6 +16,8 @@ export default function Page() {
           </div>
         </div>
       </div>
+
+      <AttendanceTable data={data[0]} />
     </div>
   );
 }
