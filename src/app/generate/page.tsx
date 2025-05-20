@@ -5,11 +5,10 @@ import CalendarCard from "@/components/CalendarCard";
 import { data } from "@/data/data";
 
 export default function Page() {
-  // You can change this date string as needed
-  const reportDate = "2024-05-10";
+  const reportDate = "2024-05-10"; // this date will also come as a prop
   return (
     <div className="print:mx-0 print:my-0 mx-20 my-10">
-      {/* Print-specific styles */}
+      {/* print styles */}
       <style jsx global>{`
         @media print {
           @page {
@@ -32,7 +31,7 @@ export default function Page() {
             <h1 className="font-bold text-2xl underline">ATTENDANCE LIST</h1>
           </div>
         </div>
-        {/* The logo */}
+        {/* the SDA logo */}
         <div>
           <Image src="/sda_logo.svg" alt="logo" width={200} height={200} />
         </div>

@@ -48,7 +48,7 @@ export const calculateChurchTotals = (data: familyData[]): familyData[] => {
       abashyitsi: 0,
     };
 
-    // Calculate totals from all families
+    // the family totals
     Object.values(weekData).forEach((familyStats) => {
       Object.keys(churchTotals).forEach((key) => {
         churchTotals[key as keyof typeof churchTotals] +=
@@ -56,7 +56,7 @@ export const calculateChurchTotals = (data: familyData[]): familyData[] => {
       });
     });
 
-    // Return the original data with church totals added
+    // return the original data with church totals added
     return {
       ...weekData,
       church: churchTotals,

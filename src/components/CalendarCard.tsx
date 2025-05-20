@@ -20,7 +20,7 @@ const CalendarCard: React.FC<CalendarCardProps> = ({ date }) => {
         background: "linear-gradient(to bottom, #e53935 60%, #fff 40%)",
       }}
     >
-      {/* Rings */}
+      {/* rings on the calendar */}
       <div className="absolute -top-2 left-0 w-full flex justify-between px-2">
         {[0, 1, 2, 3].map((i) => (
           <span
@@ -30,7 +30,7 @@ const CalendarCard: React.FC<CalendarCardProps> = ({ date }) => {
           />
         ))}
       </div>
-      {/* Red top with month */}
+      {/* red top with month */}
       <div
         className="w-full flex flex-col items-center rounded-t-2xl pt-4 pb-1 print:pt-2 print:pb-0.5"
         style={{ background: "#e53935" }}
@@ -39,7 +39,7 @@ const CalendarCard: React.FC<CalendarCardProps> = ({ date }) => {
           {month.toUpperCase()}
         </span>
       </div>
-      {/* White lower section with day */}
+      {/* white lower section */}
       <div className="flex-1 w-full flex flex-col items-center justify-center rounded-b-2xl bg-white">
         <span
           className="text-black font-extrabold text-3xl print:text-xl drop-shadow-md"

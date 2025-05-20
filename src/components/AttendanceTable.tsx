@@ -5,7 +5,7 @@ import { calculatePercentage } from "../util/calculations";
 export default function AttendanceTable({ data }: { data: familyData }) {
   if (!data) return null;
 
-  // Calculate church totals by summing up values from all families
+  // church totals
   const churchTotals: familyData[string] = {
     abanditswe: 0,
     abaje: 0,
@@ -21,7 +21,7 @@ export default function AttendanceTable({ data }: { data: familyData }) {
     abashyitsi: 0,
   };
 
-  // Calculate totals from all families
+  // calculate totals from all families
   if (data["ebenezer"]) {
     Object.keys(churchTotals).forEach((key) => {
       churchTotals[key as keyof typeof churchTotals] +=
@@ -41,7 +41,7 @@ export default function AttendanceTable({ data }: { data: familyData }) {
     });
   }
 
-  // Type-safe access to family data
+  // type-safe access to family data
   const families: Record<string, familyData[string]> = {
     ebenezer: data["ebenezer"] || {
       abanditswe: 0,
@@ -103,7 +103,7 @@ export default function AttendanceTable({ data }: { data: familyData }) {
 
   return (
     <div className="w-full overflow-x-auto space-y-4 print:space-y-2">
-      {/* Main attendance table */}
+      {/* attendance table */}
       <table className="w-full border-separate border-spacing-1 print:break-inside-avoid">
         <thead>
           <tr>
@@ -260,7 +260,7 @@ export default function AttendanceTable({ data }: { data: familyData }) {
         </tbody>
       </table>
 
-      {/* Ranking table with church percentage */}
+      {/* ranking table with church percentage */}
       <div className="pt-20">
         <div className="flex justify-between">
           <div className="flex gap-2 items-center">
