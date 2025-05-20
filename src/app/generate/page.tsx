@@ -1,10 +1,12 @@
 "use client";
 import Image from "next/image";
-
 import AttendanceTable from "@/components/AttendanceTable";
+import CalendarCard from "@/components/CalendarCard";
 import { data } from "@/data/data";
 
 export default function Page() {
+  // You can change this date string as needed
+  const reportDate = "2024-05-10";
   return (
     <div className="print:mx-0 print:my-0 mx-20 my-10">
       {/* Print-specific styles */}
@@ -22,16 +24,12 @@ export default function Page() {
       `}</style>
 
       {/* the header with data && logo */}
-      <div className="flex justify-between mb-8 print:mb-4">
+      <div className="flex justify-between">
         {/* the date && heading */}
         <div className="flex gap-3 items-center justify-center">
+          <CalendarCard date={reportDate} />
           <div>
-            <h1 className="text-lg print:text-base">May 10th</h1>
-          </div>
-          <div>
-            <h1 className="font-bold text-2xl print:text-xl underline">
-              ATTENDANCE LIST
-            </h1>
+            <h1 className="font-bold text-2xl underline">ATTENDANCE LIST</h1>
           </div>
         </div>
         {/* The logo */}
@@ -40,7 +38,7 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="print:break-inside-avoid">
+      <div className="print:break-inside-avoid my-10">
         <AttendanceTable data={data[0]} />
       </div>
     </div>
