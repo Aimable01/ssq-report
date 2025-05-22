@@ -2,20 +2,47 @@
 import Image from "next/image";
 import AttendanceTable from "@/components/AttendanceTable";
 import CalendarCard from "@/components/CalendarCard";
-import { data } from "@/data/data";
-import { useState } from "react";
+import { familyData } from "@/data/data";
+import { useState, useEffect } from "react";
 
 export default function Page() {
   const reportDate = "2024-05-10";
   const [isGenerating, setIsGenerating] = useState(false);
+  const [attendanceData, setAttendanceData] = useState<familyData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDataReady, setIsDataReady] = useState(false);
+
+  useEffect(() => {
+    // Get data from sessionStorage
+    const storedData = sessionStorage.getItem("attendanceData");
+    console.log("Stored data:", storedData); // Debug log
+
+    if (storedData) {
+      try {
+        const parsedData = JSON.parse(storedData);
+        console.log("Parsed data:", parsedData); // Debug log
+        setAttendanceData(parsedData);
+        setIsDataReady(true);
+      } catch (error) {
+        console.error("Error parsing stored data:", error);
+      }
+    } else {
+      console.log("No data found in sessionStorage"); // Debug log
+    }
+    setIsLoading(false);
+  }, []);
 
   const handleGeneratePDF = async () => {
+    if (!isDataReady || attendanceData.length === 0) {
+      alert("Please wait for the data to load before generating PDF");
+      return;
+    }
+
     setIsGenerating(true);
     try {
-      const currentUrl =
-        window.location.origin +
-        window.location.pathname +
-        window.location.search;
+      // Create a URL with the data as a parameter
+      const dataParam = encodeURIComponent(JSON.stringify(attendanceData));
+      const currentUrl = `${window.location.origin}${window.location.pathname}?data=${dataParam}`;
 
       const response = await fetch(
         `${window.location.origin}/api/generate-pdf?url=${encodeURIComponent(
@@ -28,6 +55,10 @@ export default function Page() {
           },
         }
       );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       const blob = await response.blob();
 
@@ -44,10 +75,19 @@ export default function Page() {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error generating PDF:", error);
+      alert("Error generating PDF. Please try again.");
     } finally {
       setIsGenerating(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="print:mx-0 print:my-0 mx-20 my-10">
@@ -69,9 +109,9 @@ export default function Page() {
       <div className="print:hidden mb-4">
         <button
           onClick={handleGeneratePDF}
-          disabled={isGenerating}
+          disabled={isGenerating || !isDataReady || attendanceData.length === 0}
           className={`${
-            isGenerating
+            isGenerating || !isDataReady || attendanceData.length === 0
               ? "bg-blue-400 cursor-not-allowed"
               : "bg-blue-500 hover:bg-blue-600"
           } text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-200 flex items-center gap-2`}
@@ -122,7 +162,21 @@ export default function Page() {
       </div>
 
       <div className="print:break-inside-avoid my-10">
-        <AttendanceTable data={data[0]} />
+        {attendanceData.length > 0 ? (
+          <AttendanceTable data={attendanceData[0]} />
+        ) : (
+          <div className="text-center text-red-500 mt-4">
+            No attendance data available. Please go back and fill out the forms.
+            <div className="mt-2">
+              <button
+                onClick={() => (window.location.href = "/")}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Go Back to Forms
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
