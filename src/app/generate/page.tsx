@@ -17,20 +17,46 @@ export default function Page() {
   const [isDataReady, setIsDataReady] = useState(false);
 
   useEffect(() => {
-    const storedData = sessionStorage.getItem("attendanceData");
+    // Check URL parameters first (for PDF generation)
+    const urlParams = new URLSearchParams(window.location.search);
+    const dataParam = urlParams.get("data");
+    const dateParam = urlParams.get("date");
 
-    if (storedData) {
+    let dataLoaded = false;
+
+    if (dataParam) {
       try {
-        const parsedData = JSON.parse(storedData);
-        setAttendanceData(parsedData);
+        const parsedData = JSON.parse(decodeURIComponent(dataParam));
+        setAttendanceData([parsedData]);
         setIsDataReady(true);
+        dataLoaded = true;
       } catch (error) {
-        console.error("Error parsing stored data:", error);
+        console.error("Error parsing URL data:", error);
       }
     }
 
-    // Initialize the store with data from sessionStorage
-    initializeFromStorage();
+    if (!dataLoaded) {
+      // Fallback to sessionStorage
+      const storedData = sessionStorage.getItem("attendanceData");
+      if (storedData) {
+        try {
+          const parsedData = JSON.parse(storedData);
+          setAttendanceData(parsedData);
+          setIsDataReady(true);
+        } catch (error) {
+          console.error("Error parsing stored data:", error);
+        }
+      }
+    }
+
+    if (dateParam) {
+      // Set date from URL parameter (for PDF generation)
+      const { setReportDate } = useAttendanceStore.getState();
+      setReportDate(decodeURIComponent(dateParam));
+    } else {
+      // Initialize the store with data from sessionStorage
+      initializeFromStorage();
+    }
 
     setIsLoading(false);
   }, [initializeFromStorage]);
@@ -43,8 +69,9 @@ export default function Page() {
 
     setIsGenerating(true);
     try {
-      const dataParam = encodeURIComponent(JSON.stringify(attendanceData));
-      const currentUrl = `${window.location.origin}${window.location.pathname}?data=${dataParam}`;
+      const dataParam = encodeURIComponent(JSON.stringify(attendanceData[0])); // Pass the first item, not the array
+      const dateParam = encodeURIComponent(reportDate);
+      const currentUrl = `${window.location.origin}${window.location.pathname}?data=${dataParam}&date=${dateParam}`;
 
       const response = await fetch(
         `${window.location.origin}/api/generate-pdf?url=${encodeURIComponent(

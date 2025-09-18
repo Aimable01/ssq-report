@@ -23,26 +23,16 @@ export async function GET(req: NextRequest) {
 
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
+    // Wait a bit more for the page to fully load with URL parameters
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
     const hasTable = await page.evaluate(() => {
       const table = document.querySelector("table");
       return table && table.rows.length > 0;
     });
 
     if (!hasTable) {
-      const urlParams = new URL(url);
-      const dataParam = urlParams.searchParams.get("data");
-
-      if (!dataParam) {
-        throw new Error("No data available for PDF generation");
-      }
-
-      await page.evaluate((data) => {
-        sessionStorage.setItem("attendanceData", data);
-        window.location.reload();
-      }, dataParam);
-
-      await page.waitForNavigation({ waitUntil: "networkidle0" });
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      throw new Error("No data table found on the page");
     }
 
     const pdfBuffer = await page.pdf({
