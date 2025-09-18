@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useAttendanceStore } from "@/store/attendance-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,12 +53,19 @@ export default function Home() {
     setReportDate,
     updateFamilyData,
     getTransformedData,
+    initializeFromStorage,
   } = useAttendanceStore();
+
+  // Initialize from storage when component mounts
+  React.useEffect(() => {
+    initializeFromStorage();
+  }, [initializeFromStorage]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const transformedData = getTransformedData();
     sessionStorage.setItem("attendanceData", JSON.stringify([transformedData]));
+    sessionStorage.setItem("reportDate", reportDate);
     router.push("/generate");
   };
 

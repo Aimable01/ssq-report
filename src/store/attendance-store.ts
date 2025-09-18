@@ -28,6 +28,7 @@ interface AttendanceStore {
   ) => void;
   setIsGenerating: (generating: boolean) => void;
   resetStore: () => void;
+  initializeFromStorage: () => void;
   getTransformedData: () => {
     ebenezer: Omit<FamilyData, "name">;
     salvSibs: Omit<FamilyData, "name">;
@@ -108,6 +109,15 @@ export const useAttendanceStore = create<AttendanceStore>((set, get) => ({
       families: initialFamilies,
       isGenerating: false,
     }),
+
+  initializeFromStorage: () => {
+    if (typeof window !== "undefined") {
+      const storedDate = sessionStorage.getItem("reportDate");
+      if (storedDate) {
+        set({ reportDate: storedDate });
+      }
+    }
+  },
 
   getTransformedData: () => {
     const { families } = get();

@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 
 export default function Page() {
   const router = useRouter();
-  const { reportDate } = useAttendanceStore();
+  const { reportDate, initializeFromStorage } = useAttendanceStore();
   const [isGenerating, setIsGenerating] = useState(false);
   const [attendanceData, setAttendanceData] = useState<familyData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,8 +28,12 @@ export default function Page() {
         console.error("Error parsing stored data:", error);
       }
     }
+
+    // Initialize the store with data from sessionStorage
+    initializeFromStorage();
+
     setIsLoading(false);
-  }, []);
+  }, [initializeFromStorage]);
 
   const handleGeneratePDF = async () => {
     if (!isDataReady || attendanceData.length === 0) {
