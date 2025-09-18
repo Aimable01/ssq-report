@@ -1,11 +1,41 @@
 import Image from "next/image";
-import { familyData } from "../data/data";
 import { calculatePercentage } from "../util/calculations";
+
+export interface familyData {
+  [key: string]: {
+    abanditswe: number;
+    abaje: number;
+    abizeKarindwi: number;
+    abatangiyeIsabato: number;
+    abasuye: number;
+    abasuwe: number;
+    abafashijwe: number;
+    abafashije: number;
+    abarwayi: number;
+    abasibye: number;
+    abafiteImpamvu: number;
+    abashyitsi: number;
+  };
+}
+
+const fieldLabels: Record<string, string> = {
+  abanditswe: "Abanditswe",
+  abaje: "Abaje",
+  abizeKarindwi: "Abize Karindwi",
+  abatangiyeIsabato: "Abatangiye Isabato",
+  abasuye: "Abasuye",
+  abafashije: "Abafashije",
+  abasuwe: "Abasuwe",
+  abafashijwe: "Abafashijwe",
+  abarwayi: "Abarwayi",
+  abasibye: "Abasibye",
+  abafiteImpamvu: "Abafite Impamvu",
+  abashyitsi: "Abashyitsi",
+};
 
 export default function AttendanceTable({ data }: { data: familyData }) {
   if (!data) return null;
 
-  // church totals
   const churchTotals: familyData[string] = {
     abanditswe: 0,
     abaje: 0,
@@ -21,7 +51,6 @@ export default function AttendanceTable({ data }: { data: familyData }) {
     abashyitsi: 0,
   };
 
-  // calculate totals from all families
   if (data["ebenezer"]) {
     Object.keys(churchTotals).forEach((key) => {
       churchTotals[key as keyof typeof churchTotals] +=
@@ -41,295 +70,294 @@ export default function AttendanceTable({ data }: { data: familyData }) {
     });
   }
 
-  // type-safe access to family data
+  const defaultFamilyData = {
+    abanditswe: 0,
+    abaje: 0,
+    abizeKarindwi: 0,
+    abatangiyeIsabato: 0,
+    abasuye: 0,
+    abasuwe: 0,
+    abafashijwe: 0,
+    abafashije: 0,
+    abarwayi: 0,
+    abasibye: 0,
+    abafiteImpamvu: 0,
+    abashyitsi: 0,
+  };
+
   const families: Record<string, familyData[string]> = {
-    ebenezer: data["ebenezer"] || {
-      abanditswe: 0,
-      abaje: 0,
-      abizeKarindwi: 0,
-      abatangiyeIsabato: 0,
-      abasuye: 0,
-      abasuwe: 0,
-      abafashijwe: 0,
-      abafashije: 0,
-      abarwayi: 0,
-      abasibye: 0,
-      abafiteImpamvu: 0,
-      abashyitsi: 0,
-    },
-    salvSibs: data["salvSibs"] || {
-      abanditswe: 0,
-      abaje: 0,
-      abizeKarindwi: 0,
-      abatangiyeIsabato: 0,
-      abasuye: 0,
-      abasuwe: 0,
-      abafashijwe: 0,
-      abafashije: 0,
-      abarwayi: 0,
-      abasibye: 0,
-      abafiteImpamvu: 0,
-      abashyitsi: 0,
-    },
-    jehovahNissi: data["jehovahNissi"] || {
-      abanditswe: 0,
-      abaje: 0,
-      abizeKarindwi: 0,
-      abatangiyeIsabato: 0,
-      abasuye: 0,
-      abasuwe: 0,
-      abafashijwe: 0,
-      abafashije: 0,
-      abarwayi: 0,
-      abasibye: 0,
-      abafiteImpamvu: 0,
-      abashyitsi: 0,
-    },
-    church: churchTotals || {
-      abanditswe: 0,
-      abaje: 0,
-      abizeKarindwi: 0,
-      abatangiyeIsabato: 0,
-      abasuye: 0,
-      abasuwe: 0,
-      abafashijwe: 0,
-      abafashije: 0,
-      abarwayi: 0,
-      abasibye: 0,
-      abafiteImpamvu: 0,
-      abashyitsi: 0,
-    },
+    ebenezer: data["ebenezer"] || defaultFamilyData,
+    salvSibs: data["salvSibs"] || defaultFamilyData,
+    jehovahNissi: data["jehovahNissi"] || defaultFamilyData,
+    church: churchTotals,
   };
 
   return (
-    <div className="w-full overflow-x-auto space-y-4 print:space-y-2">
-      {/* attendance table */}
-      <table className="w-full border-separate border-spacing-1 print:break-inside-avoid">
-        <thead>
-          <tr>
-            <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
-              FEATURES
-            </th>
-            <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
-              EBENEZER
-            </th>
-            <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
-              SALV SIBS
-            </th>
-            <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
-              JEHOVAH-NISSI
-            </th>
-            <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
-              CHURCH
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.entries(families.ebenezer).map(([key]) => (
-            <tr key={key} className="print:text-sm">
-              <td className="border border-black p-2 print:p-1 uppercase">
-                {key}
-              </td>
-              <td
-                className={`border border-black p-2 print:p-1 text-center ${
-                  key !== "abanditswe" &&
-                  [
-                    "abaje",
-                    "abizeKarindwi",
-                    "abatangiyeIsabato",
-                    "abasuye",
-                    "abafashije",
-                  ].includes(key) &&
-                  families.ebenezer[key as keyof typeof families.ebenezer] <
-                    families.ebenezer.abanditswe / 2
-                    ? "text-red-500"
-                    : ""
-                }`}
-              >
-                {families.ebenezer[key as keyof typeof families.ebenezer] === 0
-                  ? "-"
-                  : families.ebenezer[key as keyof typeof families.ebenezer]}
-              </td>
-              <td
-                className={`border border-black p-2 print:p-1 text-center ${
-                  key !== "abanditswe" &&
-                  [
-                    "abaje",
-                    "abizeKarindwi",
-                    "abatangiyeIsabato",
-                    "abasuye",
-                    "abafashije",
-                  ].includes(key) &&
-                  families.salvSibs[key as keyof typeof families.salvSibs] <
-                    families.salvSibs.abanditswe / 2
-                    ? "text-red-500"
-                    : ""
-                }`}
-              >
-                {families.salvSibs[key as keyof typeof families.salvSibs] === 0
-                  ? "-"
-                  : families.salvSibs[key as keyof typeof families.salvSibs]}
-              </td>
-              <td
-                className={`border border-black p-2 print:p-1 text-center ${
-                  key !== "abanditswe" &&
-                  [
-                    "abaje",
-                    "abizeKarindwi",
-                    "abatangiyeIsabato",
-                    "abasuye",
-                    "abafashije",
-                  ].includes(key) &&
-                  families.jehovahNissi[
-                    key as keyof typeof families.jehovahNissi
-                  ] <
-                    families.jehovahNissi.abanditswe / 2
-                    ? "text-red-500"
-                    : ""
-                }`}
-              >
-                {families.jehovahNissi[
-                  key as keyof typeof families.jehovahNissi
-                ] === 0
-                  ? "-"
-                  : families.jehovahNissi[
+    <div className="w-full space-y-6 print:space-y-4">
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse shadow-lg rounded-lg overflow-hidden print:shadow-none">
+          <thead>
+            <tr className="bg-gradient-to-r from-gray-900 to-gray-950">
+              <th className="border border-gray-300 text-white p-4 print:p-2 print:text-sm font-semibold text-left">
+                FEATURES
+              </th>
+              <th className="border border-gray-300 text-white p-4 print:p-2 print:text-sm font-semibold text-center">
+                EBENEZER
+              </th>
+              <th className="border border-gray-300 text-white p-4 print:p-2 print:text-sm font-semibold text-center">
+                SALVATION SIBLINGS
+              </th>
+              <th className="border border-gray-300 text-white p-4 print:p-2 print:text-sm font-semibold text-center">
+                JEHOVAH-NISSI
+              </th>
+              <th className="border border-gray-300 text-white p-4 print:p-2 print:text-sm font-semibold text-center">
+                CHURCH TOTAL
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white">
+            {Object.entries(families.ebenezer)
+              .filter(([key]) => key !== "name")
+              .map(([key], index) => (
+                <tr
+                  key={key}
+                  className={`${
+                    index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                  } hover:bg-gray-100 print:hover:bg-transparent transition-colors`}
+                >
+                  <td className="border border-gray-300 p-4 print:p-2 print:text-sm font-medium text-gray-900">
+                    {fieldLabels[key] || key.toUpperCase()}
+                  </td>
+                  <td
+                    className={`border border-gray-300 p-4 print:p-2 print:text-sm text-center font-medium ${
+                      key !== "abanditswe" &&
+                      [
+                        "abaje",
+                        "abizeKarindwi",
+                        "abatangiyeIsabato",
+                        "abasuye",
+                        "abafashije",
+                      ].includes(key) &&
+                      families.ebenezer[key as keyof typeof families.ebenezer] <
+                        families.ebenezer.abanditswe / 2
+                        ? "text-red-600 bg-red-50"
+                        : "text-gray-900"
+                    }`}
+                  >
+                    {families.ebenezer[
+                      key as keyof typeof families.ebenezer
+                    ] === 0
+                      ? "—"
+                      : families.ebenezer[
+                          key as keyof typeof families.ebenezer
+                        ]}
+                  </td>
+                  <td
+                    className={`border border-gray-300 p-4 print:p-2 print:text-sm text-center font-medium ${
+                      key !== "abanditswe" &&
+                      [
+                        "abaje",
+                        "abizeKarindwi",
+                        "abatangiyeIsabato",
+                        "abasuye",
+                        "abafashije",
+                      ].includes(key) &&
+                      families.salvSibs[key as keyof typeof families.salvSibs] <
+                        families.salvSibs.abanditswe / 2
+                        ? "text-red-600 bg-red-50"
+                        : "text-gray-900"
+                    }`}
+                  >
+                    {families.salvSibs[
+                      key as keyof typeof families.salvSibs
+                    ] === 0
+                      ? "—"
+                      : families.salvSibs[
+                          key as keyof typeof families.salvSibs
+                        ]}
+                  </td>
+                  <td
+                    className={`border border-gray-300 p-4 print:p-2 print:text-sm text-center font-medium ${
+                      key !== "abanditswe" &&
+                      [
+                        "abaje",
+                        "abizeKarindwi",
+                        "abatangiyeIsabato",
+                        "abasuye",
+                        "abafashije",
+                      ].includes(key) &&
+                      families.jehovahNissi[
+                        key as keyof typeof families.jehovahNissi
+                      ] <
+                        families.jehovahNissi.abanditswe / 2
+                        ? "text-red-600 bg-red-50"
+                        : "text-gray-900"
+                    }`}
+                  >
+                    {families.jehovahNissi[
                       key as keyof typeof families.jehovahNissi
-                    ]}
+                    ] === 0
+                      ? "—"
+                      : families.jehovahNissi[
+                          key as keyof typeof families.jehovahNissi
+                        ]}
+                  </td>
+                  <td
+                    className={`border border-gray-300 p-4 print:p-2 print:text-sm text-center font-bold ${
+                      key !== "abanditswe" &&
+                      [
+                        "abaje",
+                        "abizeKarindwi",
+                        "abatangiyeIsabato",
+                        "abasuye",
+                        "abafashije",
+                      ].includes(key) &&
+                      families.church[key as keyof typeof families.church] <
+                        families.church.abanditswe / 2
+                        ? "text-red-600 bg-red-50"
+                        : "text-gray-900"
+                    }`}
+                  >
+                    {families.church[key as keyof typeof families.church] === 0
+                      ? "—"
+                      : families.church[key as keyof typeof families.church]}
+                  </td>
+                </tr>
+              ))}
+            <tr className="bg-gradient-to-r from-gray-100 to-gray-200 font-bold">
+              <td className="border border-gray-300 p-4 print:p-2 print:text-sm font-bold text-gray-900">
+                TOTAL PERCENTAGE (%)
               </td>
               <td
-                className={`border border-black p-2 print:p-1 text-center ${
-                  key !== "abanditswe" &&
-                  [
-                    "abaje",
-                    "abizeKarindwi",
-                    "abatangiyeIsabato",
-                    "abasuye",
-                    "abafashije",
-                  ].includes(key) &&
-                  families.church[key as keyof typeof families.church] <
-                    families.church.abanditswe / 2
-                    ? "text-red-500"
-                    : ""
+                className={`border border-gray-300 p-4 print:p-2 print:text-sm text-center font-bold ${
+                  calculatePercentage(families.ebenezer) < 50
+                    ? "text-red-600"
+                    : "text-gray-900"
                 }`}
               >
-                {families.church[key as keyof typeof families.church] === 0
-                  ? "-"
-                  : families.church[key as keyof typeof families.church]}
+                {calculatePercentage(families.ebenezer).toFixed(1)}%
+              </td>
+              <td
+                className={`border border-gray-300 p-4 print:p-2 print:text-sm text-center font-bold ${
+                  calculatePercentage(families.salvSibs) < 50
+                    ? "text-red-600"
+                    : "text-gray-900"
+                }`}
+              >
+                {calculatePercentage(families.salvSibs).toFixed(1)}%
+              </td>
+              <td
+                className={`border border-gray-300 p-4 print:p-2 print:text-sm text-center font-bold ${
+                  calculatePercentage(families.jehovahNissi) < 50
+                    ? "text-red-600"
+                    : "text-gray-900"
+                }`}
+              >
+                {calculatePercentage(families.jehovahNissi).toFixed(1)}%
+              </td>
+              <td
+                className={`border border-gray-300 p-4 print:p-2 print:text-sm text-center font-bold ${
+                  calculatePercentage(families.church) < 50
+                    ? "text-red-600"
+                    : "text-gray-900"
+                }`}
+              >
+                {calculatePercentage(families.church).toFixed(1)}%
               </td>
             </tr>
-          ))}
-          <tr className="print:text-sm">
-            <td className="border border-black p-2 print:p-1 uppercase">
-              TOTAL PERCENT (%)
-            </td>
-            <td
-              className={`border border-black p-2 print:p-1 text-center ${
-                calculatePercentage(families.ebenezer) < 50
-                  ? "text-red-500"
-                  : ""
-              }`}
-            >
-              {calculatePercentage(families.ebenezer).toFixed(2)}%
-            </td>
-            <td
-              className={`border border-black p-2 print:p-1 text-center ${
-                calculatePercentage(families.salvSibs) < 50
-                  ? "text-red-500"
-                  : ""
-              }`}
-            >
-              {calculatePercentage(families.salvSibs).toFixed(2)}%
-            </td>
-            <td
-              className={`border border-black p-2 print:p-1 text-center ${
-                calculatePercentage(families.jehovahNissi) < 50
-                  ? "text-red-500"
-                  : ""
-              }`}
-            >
-              {calculatePercentage(families.jehovahNissi).toFixed(2)}%
-            </td>
-            <td
-              className={`border border-black p-2 print:p-1 text-center ${
-                calculatePercentage(families.church) < 50 ? "text-red-500" : ""
-              }`}
-            >
-              {calculatePercentage(families.church).toFixed(2)}%
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
 
-      {/* ranking table with church percentage */}
-      <div className="pt-20">
-        <div className="flex justify-between">
-          <div className="flex gap-2 items-center">
-            <h1 className="font-bold text-2xl print:text-xl underline">
-              RANKING
-            </h1>
-          </div>
+      <div className="pt-6 print:pt-4">
+        <div className="flex justify-between items-center mb-4 print:mb-3">
           <div>
-            <Image src="/sda_logo.svg" alt="logo" width={180} height={180} />
+            <h2 className="font-bold text-2xl print:text-xl text-gray-900 tracking-tight">
+              FAMILY RANKING
+            </h2>
+          </div>
+          <div className="flex-shrink-0">
+            <Image
+              src="/sda_logo.svg"
+              alt="SDA Logo"
+              width={120}
+              height={120}
+              className="print:w-16 print:h-16"
+            />
           </div>
         </div>
-        <div className="flex gap-1 print:break-inside-avoid">
-          <table className="w-[500px] border-separate border-spacing-1">
-            <thead>
-              <tr>
-                <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
-                  FAMILY
-                </th>
-                <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
-                  PERCENTAGE
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(families)
-                .filter(([key]) => key !== "church")
-                .map(([family, stats]) => ({
-                  name: family.toUpperCase(),
-                  percentage: calculatePercentage(stats),
-                }))
-                .sort((a, b) => b.percentage - a.percentage)
-                .map(({ name, percentage }) => (
-                  <tr key={name} className="print:text-sm">
-                    <td className="border border-black p-2 print:p-1">
-                      {name}
-                    </td>
-                    <td
-                      className={`border border-black p-2 print:p-1 text-center ${
-                        percentage < 50 ? "text-red-500" : ""
-                      }`}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="overflow-hidden rounded-lg shadow-lg print:shadow-none">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gradient-to-r from-gray-900 to-gray-950">
+                  <th className="border border-gray-300 text-white p-4 print:p-2 print:text-sm font-semibold text-left">
+                    FAMILY
+                  </th>
+                  <th className="border border-gray-300 text-white p-4 print:p-2 print:text-sm font-semibold text-center">
+                    PERCENTAGE
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white">
+                {Object.entries(families)
+                  .filter(([key]) => key !== "church")
+                  .map(([family, stats]) => ({
+                    name:
+                      family === "salvSibs"
+                        ? "SALVATION SIBLINGS"
+                        : family.toUpperCase(),
+                    percentage: calculatePercentage(stats),
+                  }))
+                  .sort((a, b) => b.percentage - a.percentage)
+                  .map(({ name, percentage }, index) => (
+                    <tr
+                      key={name}
+                      className={`${
+                        index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                      } hover:bg-gray-100 print:hover:bg-transparent transition-colors`}
                     >
-                      {percentage.toFixed(2)}%
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          <table className="border-separate border-spacing-1">
-            <thead>
-              <tr>
-                <th className="border border-black bg-black text-white p-2 print:p-1 print:text-sm">
-                  CHURCH
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="print:text-sm">
-                <td
-                  className={`border border-black p-2 print:p-1 text-center ${
-                    calculatePercentage(families.church) < 50
-                      ? "text-red-500"
-                      : ""
-                  }`}
-                >
-                  {calculatePercentage(families.church).toFixed(2)}%
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                      <td className="border border-gray-300 p-4 print:p-2 print:text-sm font-medium text-gray-900">
+                        {name}
+                      </td>
+                      <td
+                        className={`border border-gray-300 p-4 print:p-2 print:text-sm text-center font-bold ${
+                          percentage < 50 ? "text-red-600" : "text-gray-900"
+                        }`}
+                      >
+                        {percentage.toFixed(1)}%
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="overflow-hidden rounded-lg shadow-lg print:shadow-none">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gradient-to-r from-gray-900 to-gray-950">
+                  <th className="border border-gray-300 text-white p-4 print:p-2 print:text-sm font-semibold text-center">
+                    CHURCH OVERALL
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white">
+                <tr>
+                  <td
+                    className={`border border-gray-300 p-8 print:p-4 text-center font-bold text-2xl print:text-xl ${
+                      calculatePercentage(families.church) < 50
+                        ? "text-red-600 bg-red-50"
+                        : "text-gray-900 bg-gray-50"
+                    }`}
+                  >
+                    {calculatePercentage(families.church).toFixed(1)}%
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
