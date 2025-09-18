@@ -90,12 +90,14 @@ export default function Page() {
           @media print {
             @page {
               size: A4;
-              margin: 0.5cm;
+              margin: 0.3cm;
             }
             body {
               -webkit-print-color-adjust: exact;
               print-color-adjust: exact;
               background: white !important;
+              margin: 0 !important;
+              padding: 0 !important;
             }
             .print\\:bg-white {
               background: white !important;
@@ -103,6 +105,15 @@ export default function Page() {
             .print\\:compact {
               margin: 0 !important;
               padding: 0 !important;
+            }
+            .print\\:no-break {
+              page-break-inside: avoid;
+            }
+            table td,
+            table th {
+              padding: 2px 4px !important;
+              font-size: 10px !important;
+              line-height: 1.2 !important;
             }
           }
         `}</style>
@@ -138,14 +149,17 @@ export default function Page() {
           </Button>
         </div>
 
-        <div className="print:bg-white bg-white rounded-2xl shadow-lg print:shadow-none max-w-6xl mx-auto p-8 print:p-4">
-          <div className="flex justify-between items-start mb-6 print:mb-4">
+        <div className="print:bg-white bg-white rounded-2xl shadow-lg print:shadow-none max-w-6xl mx-auto p-8 print:p-2">
+          <div className="flex justify-between items-start mb-6 print:mb-2">
             <div className="flex gap-4 items-center">
               <CalendarCard date={reportDate} />
               <div>
-                <h1 className="font-bold text-3xl print:text-2xl text-gray-900 tracking-tight">
+                <h1 className="font-bold text-3xl print:text-xl text-gray-900 tracking-tight">
                   ATTENDANCE REPORT
                 </h1>
+                <p className="text-gray-600 text-sm mt-1 print:hidden">
+                  Sabbath School Quarterly
+                </p>
               </div>
             </div>
             <div className="flex-shrink-0">
@@ -154,12 +168,12 @@ export default function Page() {
                 alt="SDA Logo"
                 width={180}
                 height={180}
-                className="print:w-32 print:h-32"
+                className="print:w-24 print:h-24"
               />
             </div>
           </div>
 
-          <div className="print:break-inside-avoid">
+          <div className="print:break-inside-avoid print:no-break">
             {attendanceData.length > 0 ? (
               <AttendanceTable data={attendanceData[0]} />
             ) : (
