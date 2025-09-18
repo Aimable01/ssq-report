@@ -95,22 +95,22 @@ export default function AttendanceTable({ data }: { data: familyData }) {
   return (
     <div className="w-full space-y-6 print:space-y-2">
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse shadow-lg rounded-lg overflow-hidden print:shadow-none print:text-xs">
+        <table className="w-full border-collapse shadow-lg rounded-lg overflow-hidden print:shadow-none print:text-sm">
           <thead>
             <tr className="bg-gradient-to-r from-gray-900 to-gray-950">
-              <th className="border border-gray-300 text-white p-4 print:p-1 print:text-xs font-semibold text-left">
+              <th className="border border-gray-300 text-white p-4 print:p-2 print:text-sm font-semibold text-left">
                 FEATURES
               </th>
-              <th className="border border-gray-300 text-white p-4 print:p-1 print:text-xs font-semibold text-center">
+              <th className="border border-gray-300 text-white p-4 print:p-2 print:text-sm font-semibold text-center">
                 EBENEZER
               </th>
-              <th className="border border-gray-300 text-white p-4 print:p-1 print:text-xs font-semibold text-center">
+              <th className="border border-gray-300 text-white p-4 print:p-2 print:text-sm font-semibold text-center">
                 SALVATION SIBLINGS
               </th>
-              <th className="border border-gray-300 text-white p-4 print:p-1 print:text-xs font-semibold text-center">
+              <th className="border border-gray-300 text-white p-4 print:p-2 print:text-sm font-semibold text-center">
                 JEHOVAH-NISSI
               </th>
-              <th className="border border-gray-300 text-white p-4 print:p-1 print:text-xs font-semibold text-center">
+              <th className="border border-gray-300 text-white p-4 print:p-2 print:text-sm font-semibold text-center">
                 CHURCH TOTAL
               </th>
             </tr>
@@ -272,7 +272,7 @@ export default function AttendanceTable({ data }: { data: familyData }) {
       <div className="pt-6 print:pt-2">
         <div className="flex justify-between items-center mb-4 print:mb-1">
           <div>
-            <h2 className="font-bold text-2xl print:text-xl text-gray-900 tracking-tight">
+            <h2 className="font-bold text-2xl print:text-lg text-gray-900 tracking-tight">
               FAMILY RANKING
             </h2>
           </div>

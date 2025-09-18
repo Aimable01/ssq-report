@@ -111,9 +111,9 @@ export default function Page() {
             }
             table td,
             table th {
-              padding: 2px 4px !important;
-              font-size: 10px !important;
-              line-height: 1.2 !important;
+              padding: 4px 6px !important;
+              font-size: 12px !important;
+              line-height: 1.3 !important;
             }
           }
         `}</style>
@@ -154,7 +154,7 @@ export default function Page() {
             <div className="flex gap-4 items-center">
               <CalendarCard date={reportDate} />
               <div>
-                <h1 className="font-bold text-3xl print:text-xl text-gray-900 tracking-tight">
+                <h1 className="font-bold text-3xl print:text-2xl text-gray-900 tracking-tight">
                   ATTENDANCE REPORT
                 </h1>
                 <p className="text-gray-600 text-sm mt-1 print:hidden">
@@ -168,7 +168,7 @@ export default function Page() {
                 alt="SDA Logo"
                 width={180}
                 height={180}
-                className="print:w-24 print:h-24"
+                className="print:w-28 print:h-28"
               />
             </div>
           </div>
