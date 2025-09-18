@@ -15,29 +15,20 @@ export async function GET(req: NextRequest) {
 
   try {
     const page = await browser.newPage();
-
-    // Set a longer timeout for page load
     await page.setDefaultNavigationTimeout(30000);
-
-    // Navigate to the page
     await page.goto(url, { waitUntil: "networkidle0" });
-
-    // Wait for the attendance table container
     await page.waitForSelector(".print\\:break-inside-avoid", {
       timeout: 5000,
     });
 
-    // Add a small delay to ensure all content is rendered
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // Check if the table is actually rendered with data
     const hasTable = await page.evaluate(() => {
       const table = document.querySelector("table");
       return table && table.rows.length > 0;
     });
 
     if (!hasTable) {
-      // If no table is found, try to get the data from URL
       const urlParams = new URL(url);
       const dataParam = urlParams.searchParams.get("data");
 
@@ -45,14 +36,11 @@ export async function GET(req: NextRequest) {
         throw new Error("No data available for PDF generation");
       }
 
-      // Set the data in sessionStorage
       await page.evaluate((data) => {
         sessionStorage.setItem("attendanceData", data);
-        // Reload the page to trigger the data loading
         window.location.reload();
       }, dataParam);
 
-      // Wait for the page to reload and render
       await page.waitForNavigation({ waitUntil: "networkidle0" });
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }

@@ -157,9 +157,6 @@ export default function Page() {
                 <h1 className="font-bold text-3xl print:text-3xl text-gray-900 tracking-tight">
                   ATTENDANCE REPORT
                 </h1>
-                <p className="text-gray-600 text-sm mt-1 print:hidden">
-                  Sabbath School Quarterly
-                </p>
               </div>
             </div>
             <div className="flex-shrink-0">

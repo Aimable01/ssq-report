@@ -11,7 +11,7 @@ const publicSans = Public_Sans({
 
 export const metadata: Metadata = {
   title: "SSQ - Report Generator",
-  description: "Sabbath school report generator",
+  description: "RCA - SDA Sabbath School Report Generator",
 };
 
 export default function RootLayout({
